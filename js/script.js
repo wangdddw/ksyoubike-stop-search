@@ -110,7 +110,7 @@ function getBikeStopList(){
     } else {
       bikeIcon = greenIcon;
     };
-    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).addTo(map).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`));
+    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`));
   };
   map.addLayer(markers);
 }
@@ -176,5 +176,5 @@ function updateData(e){
   } else {
     bikeIcon = greenIcon;
   };
-  L.marker(location,{ icon: bikeIcon }).addTo(map).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+  L.marker(location,{ icon: bikeIcon }).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
 };
