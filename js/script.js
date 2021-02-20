@@ -176,5 +176,5 @@ function updateData(e){
   } else {
     bikeIcon = greenIcon;
   };
-  L.marker(location,{ icon: bikeIcon }).addTo(map).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+  L.marker(location,{ icon: bikeIcon }).addTo(map).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`);
 };
