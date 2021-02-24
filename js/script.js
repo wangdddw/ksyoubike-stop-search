@@ -5,15 +5,16 @@ var bikeStopList = document.querySelector('.bikeStopMessage');
 var map = L.map("map", {
   center: [22.62094199479303, 120.31185614733077],
   zoom: 17,
-  tap: false,
-});
-map.locate({
-  setView: true,
-  maxZoom: 17,
-});
+  tap: true,
+  tapTolerance: 20,
+  
+}).fitWorld();
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>         contributors',
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  maxZoom: 18,
+  tileSize: 512,
+  zoomOffset: -1
 }).addTo(map);
 
 //icon
@@ -105,16 +106,11 @@ function getBikeStopList(){
     } else {
       bikeIcon = greenIcon;
     };
-    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`).openPopup());
+    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<h5>${bikeStop[i].sna.substring(11, 30)}</h5><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`).openPopup());
   };
   map.addLayer(markers);
   
 };
-for(let n = 0 ; n < bikeStop.length ; n++){
-  if(bikeStop[i].sbi == 0){
-    document.getElementById('bike-rent').style.background="#7B7B7B";
-  };
-}
 
 //下拉式選單
 selectAreaList.addEventListener('change' , areaSelected , false);
@@ -171,6 +167,6 @@ function updateData(e){
   } else {
     bikeIcon = greenIcon;
   };
-  L.marker(location,{ icon: bikeIcon }).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+  L.marker(location,{ icon: bikeIcon }).bindPopup(`<h5>${tempName}</h5><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
   
 };
