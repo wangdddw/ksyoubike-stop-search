@@ -110,23 +110,15 @@ function getBikeStopList(){
     } else {
       bikeIcon = greenIcon;
     };
-    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`));
+    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`)).onPopup();
   };
   map.addLayer(markers);
   
-}
-L.DomEvent.on(map, 'click', function (e) {
-  L.DomEvent.stopPropagation(e);
-});
+};
 for(let n = 0 ; n < bikeStop.length ; n++){
   if(bikeStop[i].sbi == 0){
     document.getElementById('bike-rent').style.background="#7B7B7B";
   };
-}
-
-map.addEventListener('click' , showPop , false);
-function showPop(e){
-  e.stopPropagation();
 }
 
 //下拉式選單
