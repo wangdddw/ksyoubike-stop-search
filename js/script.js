@@ -122,8 +122,8 @@ for(let n = 0 ; n < bikeStop.length ; n++){
 }
 
 map.addEventListener('click' , showPop , false);
-function showPop(){
-  map.stopPropagation();
+function showPop(e){
+  e.stopPropagation();
 }
 
 //下拉式選單
