@@ -5,7 +5,8 @@ var bikeStopMessage = document.querySelector('.bikeStopMessage');
 //map
 var map = L.map('map', {
   center: [22.62094199479303, 120.31185614733077],
-  zoom: 16
+  zoom: 16,
+  
 });
 var div = L.DomUtil.get('map');
 if(!L.Browser.touch){
@@ -111,3 +112,57 @@ function getBikeStopList(){
     
   };
 };
+//下拉式選單至地圖
+selectArea.addEventListener('change', areaSelected, false);
+function areaSelected() {
+  let select = selectArea.value;
+  let len = bikeStopList.length;
+  let str = '';
+  for (let i = 0; i < len; i++) {
+    if (select == bikeStopList[i].sarea) {
+      console.log(select);
+      str += `<div class="card bikeStopList">
+                <div class="card-body">
+                  <div class="bike-stop-name">
+                    <h5 class="card-title">${bikeStopList[i].sna.substring(11, 30)}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${bikeStopList[i].ar}</h6>
+                    <a class="card-text checkLocation" data-name="${bikeStopList[i].sna.substring(11, 30)}" data-location="${bikeStopList[i].lat},${bikeStopList[i].lng}" data-sbi="${bikeStopList[i].sbi}" data-bemp="${bikeStopList[i].bemp}">查看位置
+                  </a>
+                  </div>
+                  <div class="row bikeAccount justify-content-center">
+                    <div class="bike-rent">
+                      <h5>可借</h5><h3>${bikeStopList[i].sbi}</h3>
+                    </div>
+                    <div class="bike-stop">
+                      <h5>可停</h5><h3>${bikeStopList[i].bemp}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+      bikeStopMessage.innerHTML = str;
+      map.setView([bikeStopList[i].lat, bikeStopList[i].lng]);
+    };
+  };
+};
+//查看位置
+$(bikeStopMessage).delegate(`.checkLocation` , `click` , function(e){
+  let select = e.target.dataset.location;
+  let str = select.split(`,`);
+  let lat = parseFloat(str[0]);
+  let lng = parseFloat(str[1]);
+  let tempName = e.target.dataset.name;
+  let location = [lat, lng];
+  let sbi = e.target.dataset.sbi;
+  let bemp = e.target.dataset.bemp;
+  let bikeIcon;
+  map.setView(location, 20);
+  if (bemp == 0) {
+    bikeIcon = redIcon;
+
+  } else if (sbi == 0) {
+    bikeIcon = greyIcon;
+  } else {
+    bikeIcon = greenIcon;
+  };
+  L.marker(location, { icon: bikeIcon }).bindPopup(`<h5>${tempName}</h5><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+});
