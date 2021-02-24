@@ -7,6 +7,11 @@ var map = L.map('map', {
   center: [22.62094199479303, 120.31185614733077],
   zoom: 16
 });
+map.on('click' , stopPop);
+function stopPop(){
+  map.originalEvent.preventDefault();
+
+}
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
