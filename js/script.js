@@ -5,21 +5,16 @@ var bikeStopList = document.querySelector('.bikeStopMessage');
 var map = L.map("map", {
   center: [22.62094199479303, 120.31185614733077],
   zoom: 17,
+  tap: false,
 });
 map.locate({
   setView: true,
   maxZoom: 17,
 });
-map.on('locationfound' , function(e){
-  L.marker(e.latlng).addTo(map).bindPopup('目前位置');
-});
-map.on('locationerror' , function(e){
-  console.log("無法定位" , e);
-})
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>         contributors',
 }).addTo(map);
-L.Control.geocoder().addTo(map);
 
 //icon
 var greenIcon = new L.Icon({
@@ -110,7 +105,7 @@ function getBikeStopList(){
     } else {
       bikeIcon = greenIcon;
     };
-    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`)).onPopup();
+    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<span>${bikeStop[i].sna.substring(11, 30)}</span><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`));
   };
   map.addLayer(markers);
   
