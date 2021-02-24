@@ -151,26 +151,26 @@ function areaSelected(){
 };
 
 //查看位置click function
-bikeStopList.addEventListener('click' , updateData , false);
-function updateData(e){
-  let select = e.target.dataset.location;
-  let str = select.split(`,`);
-  let lat = parseFloat(str[0]);
-  let lng = parseFloat(str[1]);
-  let tempName = e.target.dataset.name;
-  let location = [lat , lng];
-  let sbi = e.target.dataset.sbi;
-  let bemp = e.target.dataset.bemp;
-  let bikeIcon;
-  map.setView(location , 20);
-  if (bemp == 0) {
-    bikeIcon = redIcon;
+// bikeStopList.addEventListener('click' , updateData , false);
+// function updateData(e){
+//   let select = e.target.dataset.location;
+//   let str = select.split(`,`);
+//   let lat = parseFloat(str[0]);
+//   let lng = parseFloat(str[1]);
+//   let tempName = e.target.dataset.name;
+//   let location = [lat , lng];
+//   let sbi = e.target.dataset.sbi;
+//   let bemp = e.target.dataset.bemp;
+//   let bikeIcon;
+//   map.setView(location , 20);
+//   if (bemp == 0) {
+//     bikeIcon = redIcon;
 
-  } else if (sbi == 0) {
-    bikeIcon = greyIcon;
-  } else {
-    bikeIcon = greenIcon;
-  };
-  L.marker(location,{ icon: bikeIcon }).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+//   } else if (sbi == 0) {
+//     bikeIcon = greyIcon;
+//   } else {
+//     bikeIcon = greenIcon;
+//   };
+//   L.marker(location,{ icon: bikeIcon }).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
   
-};
+// };
