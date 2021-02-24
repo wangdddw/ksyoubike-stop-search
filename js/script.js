@@ -177,4 +177,6 @@ function updateData(e){
     bikeIcon = greenIcon;
   };
   L.marker(location,{ icon: bikeIcon }).bindPopup(`<span>${tempName}</span><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+  L.stopPropagation();
+  
 };
