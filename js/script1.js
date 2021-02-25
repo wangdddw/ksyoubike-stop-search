@@ -6,6 +6,7 @@ var bikeStopMessage = document.querySelector('.bikeStopMessage');
 var map = L.map('map', {
   center: [22.62094199479303, 120.31185614733077],
   zoom: 16,
+  tapTolerance: 30,
   
 });
 var div = L.DomUtil.get('map');
