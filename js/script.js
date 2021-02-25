@@ -1,22 +1,18 @@
+var selectArea = document.getElementById("selectArea");
+var bikeStopMessage = document.querySelector('.bikeStopMessage');
 
-var selectAreaList = document.getElementById("selectArea");
-var bikeStopList = document.querySelector('.bikeStopMessage');
+
 //map
-var map = L.map("map", {
+var map = L.map('map', {
   center: [22.62094199479303, 120.31185614733077],
-  zoom: 17,
-  tap: true,
-  tapTolerance: 20,
+  zoom: 16,
+  tapTolerance: 30,
+  dragging:false,
   
-}).fitWorld();
-
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  maxZoom: 18,
-  tileSize: 512,
-  zoomOffset: -1
+});
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
 //icon
 var greenIcon = new L.Icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -44,121 +40,117 @@ var greyIcon = new L.Icon({
 });
 var markers = new L.MarkerClusterGroup().addTo(map);
 
+
 //data
-var bikeStop = [];
-var selectArea = [];
+var bikeStopList = [];
+var selectAreaList = []
+
 var xhr = new XMLHttpRequest();
-xhr.open('get','https://api.kcg.gov.tw/api/service/Get/b4dd9c40-9027-4125-8666-06bef1756092',true);
+xhr.open('get', 'https://api.kcg.gov.tw/api/service/Get/b4dd9c40-9027-4125-8666-06bef1756092' , true);
 xhr.send(null);
 xhr.onload = function(){
   const data = JSON.parse(xhr.responseText);
-  bikeStop = data.data.retVal;
-  // console.log(bikeStop);
-  getBikeStopList();
+  bikeStopList = data.data.retVal;
+  //console.log(bikeStopList);
   getAreaList();
+  getBikeStopList();
 }
+//下拉式選單
 function getAreaList(){
   let areaList = [];
   let str = `<option value="請選擇行政區">-----請選擇行政區-----</option>`;
-  for(let i = 0 ; i < bikeStop.length ; i++){
-    areaList.push(bikeStop[i].sarea);
+  for (let i = 0; i < bikeStopList.length; i++) {
+    areaList.push(bikeStopList[i].sarea);
   }
-  areaList.forEach(function(value){
-    if(selectArea.indexOf(value) == -1){
-      selectArea.push(value);
+  areaList.forEach(function (value) {
+    if (selectAreaList.indexOf(value) == -1) {
+      selectAreaList.push(value);
     };
   });
-  for(let j = 0 ; j < selectArea.length ; j++){
-    str += `<option value="${selectArea[j]}">${selectArea[j]}</option>`;
+  for (let j = 0; j < selectAreaList.length; j++) {
+    str += `<option value="${selectAreaList[j]}">${selectAreaList[j]}</option>`;
   }
-  selectAreaList.innerHTML = str;
+  selectArea.innerHTML = str;
 };
-
-
+//列表
 function getBikeStopList(){
   let str = '';
   let bikeIcon;
-  for (let i = 0; i < bikeStop.length; i++) {
+  for (let i = 0; i < bikeStopList.length; i++) {
     str += `<div class="card bikeStopList">
               <div class="card-body">
                 <div class="bike-stop-name">
-                  <h5 class="card-title">${bikeStop[i].sna.substring(11, 30)}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">${bikeStop[i].ar}</h6>
-                  <a class="card-text checkLocation" data-name="${bikeStop[i].sna.substring(11,30)}" data-location="${bikeStop[i].lat},${bikeStop[i].lng}" data-sbi="${bikeStop[i].sbi}" data-bemp="${bikeStop[i].bemp}">查看位置
+                  <h5 class="card-title">${bikeStopList[i].sna.substring(11, 30)}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">${bikeStopList[i].ar}</h6>
+                  <a class="card-text checkLocation" data-name="${bikeStopList[i].sna.substring(11, 30)}" data-location="${bikeStopList[i].lat},${bikeStopList[i].lng}" data-sbi="${bikeStopList[i].sbi}" data-bemp="${bikeStopList[i].bemp}">查看位置
                 </a>
                 </div>
                 <div class="row bikeAccount justify-content-center">
                   <div class="bike-rent">
-                    <h5>可借</h5><h3>${bikeStop[i].sbi}</h3>
+                    <h5>可借</h5><h3>${bikeStopList[i].sbi}</h3>
                   </div>
                   <div class="bike-stop">
-                    <h5>可停</h5><h3>${bikeStop[i].bemp}</h3>
+                    <h5>可停</h5><h3>${bikeStopList[i].bemp}</h3>
                   </div>
                 </div>
               </div>
             </div>`;
-    
-    bikeStopList.innerHTML = str;
-    if (bikeStop[i].bemp == 0) {
+    bikeStopMessage.innerHTML = str;
+    if (bikeStopList[i].bemp == 0) {
       bikeIcon = redIcon;
-    } else if (bikeStop[i].sbi == 0) {
+    } else if (bikeStopList[i].sbi == 0) {
       bikeIcon = greyIcon;
     } else {
       bikeIcon = greenIcon;
     };
-    markers.addLayer(L.marker([bikeStop[i].lat, bikeStop[i].lng], { icon: bikeIcon }).bindPopup(`<h5>${bikeStop[i].sna.substring(11, 30)}</h5><br/><span>可借：${bikeStop[i].sbi}</span><span>可停：${bikeStop[i].bemp}</span>`).openPopup());
+    markers.addLayer(L.marker([bikeStopList[i].lat, bikeStopList[i].lng], { icon: bikeIcon }).bindPopup(`<h5>${bikeStopList[i].sna.substring(11, 30)}</h5><br/><span>可借：${bikeStopList[i].sbi}</span><span>可停：${bikeStopList[i].bemp}</span>`));
+    
   };
-  map.addLayer(markers);
-  
 };
-
-//下拉式選單
-selectAreaList.addEventListener('change' , areaSelected , false);
-function areaSelected(){
-  let select = selectAreaList.value;
-  let len = bikeStop.length;
+//下拉式選單至地圖
+selectArea.addEventListener('change', areaSelected, false);
+function areaSelected() {
+  let select = selectArea.value;
+  let len = bikeStopList.length;
   let str = '';
-  for(let i = 0 ; i < len ; i++){
-    if(select == bikeStop[i].sarea){
+  for (let i = 0; i < len; i++) {
+    if (select == bikeStopList[i].sarea) {
       console.log(select);
       str += `<div class="card bikeStopList">
                 <div class="card-body">
                   <div class="bike-stop-name">
-                    <h5 class="card-title">${bikeStop[i].sna.substring(11, 30)}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">${bikeStop[i].ar}</h6>
-                    <a class="card-text checkLocation" data-name="${bikeStop[i].sna.substring(11, 30)}" data-location="${bikeStop[i].lat},${bikeStop[i].lng}" data-sbi="${bikeStop[i].sbi}" data-bemp="${bikeStop[i].bemp}">查看位置
+                    <h5 class="card-title">${bikeStopList[i].sna.substring(11, 30)}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${bikeStopList[i].ar}</h6>
+                    <a class="card-text checkLocation" data-name="${bikeStopList[i].sna.substring(11, 30)}" data-location="${bikeStopList[i].lat},${bikeStopList[i].lng}" data-sbi="${bikeStopList[i].sbi}" data-bemp="${bikeStopList[i].bemp}">查看位置
                   </a>
                   </div>
                   <div class="row bikeAccount justify-content-center">
                     <div class="bike-rent">
-                      <h5>可借</h5><h3>${bikeStop[i].sbi}</h3>
+                      <h5>可借</h5><h3>${bikeStopList[i].sbi}</h3>
                     </div>
                     <div class="bike-stop">
-                      <h5>可停</h5><h3>${bikeStop[i].bemp}</h3>
+                      <h5>可停</h5><h3>${bikeStopList[i].bemp}</h3>
                     </div>
                   </div>
                 </div>
               </div>`;
-      bikeStopList.innerHTML = str;
-      map.setView([bikeStop[i].lat , bikeStop[i].lng]);
+      bikeStopMessage.innerHTML = str;
+      map.setView([bikeStopList[i].lat, bikeStopList[i].lng]);
     };
-    
   };
 };
-
-//查看位置click function
-bikeStopList.addEventListener('click' , updateData , false);
-function updateData(e){
+//查看位置
+$(bikeStopMessage).delegate(`.checkLocation` , `click` , function(e){
   let select = e.target.dataset.location;
   let str = select.split(`,`);
   let lat = parseFloat(str[0]);
   let lng = parseFloat(str[1]);
   let tempName = e.target.dataset.name;
-  let location = [lat , lng];
+  let location = [lat, lng];
   let sbi = e.target.dataset.sbi;
   let bemp = e.target.dataset.bemp;
   let bikeIcon;
-  map.setView(location , 20);
+  map.setView(location, 20);
   if (bemp == 0) {
     bikeIcon = redIcon;
 
@@ -167,6 +159,5 @@ function updateData(e){
   } else {
     bikeIcon = greenIcon;
   };
-  L.marker(location,{ icon: bikeIcon }).bindPopup(`<h5>${tempName}</h5><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
-  
-};
+  L.marker(location, { icon: bikeIcon }).bindPopup(`<h5>${tempName}</h5><br/><span>可借：${sbi}</span><span>可停：${bemp}</span>`).openPopup();
+});
