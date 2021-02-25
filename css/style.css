@@ -87,4 +87,10 @@
 	.bikeStopMessage{
 		display: none;
 	}
+	#title{
+		margin-bottom: 10px;
+	}
+	.list , #map{
+		height: 60vh;
+	}
 } 
