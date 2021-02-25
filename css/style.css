@@ -41,6 +41,7 @@
 	.marker-cluster span {
 		line-height: 30px;
 		}
+.leaflet-marker-icon { -webkit-touch-callout: none; }
 #title{
 	padding: 20px;
 	background-color:rgba(228, 228, 228, 0.8);
