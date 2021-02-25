@@ -88,7 +88,7 @@
 		display: none;
 	}
 	#title{
-		margin-bottom: 10px;
+		margin-bottom: 0px;
 	}
 	.list , #map{
 		height: 60vh;
